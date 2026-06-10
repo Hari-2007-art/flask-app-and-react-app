@@ -41,7 +41,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    cd ~/Docker
+                    cd /home/hari007/Docker
                     docker-compose down
                     docker-compose up -d --build
                    '''
