@@ -5,3 +5,7 @@ node_modules/
 build/
 dist/
 *.log
+venv/
+.Dockerfile.swp
+Dockerfile.local
+Dockerfile.single
