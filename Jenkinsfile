@@ -31,7 +31,7 @@ pipeline {
         stage('Push Images to Docker HUB') {
             steps {
                 sh '''
-                    echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin
+                    docker login -u $DOCKER_HUB_CREDENTIALS_USR -p $DOCKER_HUB_CREDENTIALS_PSW
                     docker push $FLASK_IMAGE:latest
                     docker push $REACT_IMAGE:latest
                    '''
