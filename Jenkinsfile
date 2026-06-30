@@ -42,8 +42,8 @@ pipeline {
             steps {
                 sh '''
                     cd /home/hari007/Docker
-                    docker-compose down
-                    docker-compose up -d --build
+                    docker compose down
+                    docker compose up -d --build
                    '''
             }
         }
