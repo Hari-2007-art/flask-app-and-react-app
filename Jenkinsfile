@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploying') {
             steps {
                 sh '''
                     cd /home/hari007/Docker
