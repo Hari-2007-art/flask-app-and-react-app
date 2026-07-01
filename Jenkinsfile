@@ -40,11 +40,22 @@ pipeline {
 
         stage('Deploying') {
             steps {
-                sh '''
-                    cd /home/hari007/Docker
-                    docker compose down
-                    docker compose up -d --build
-                   '''
+                 sh '''
+                    export KUBECONFIG=/var/jenkins_home/.kube/config
+
+                    kubectl apply -f K8ss/loki.yml
+                    kubectl apply -f K8ss/promtail.yml
+                    kubectl apply -f K8ss/grafana.yml
+
+                    kubectl apply -f K8ss/flask-deployment.yml
+                    kubectl apply -f K8ss/deployment.yml
+
+                    kubectl rollout restart deployment/flask-app
+                    kubectl rollout restart deployment/react-app
+
+                    kubectl rollout status deployment/flask-app
+                    kubectl rollout status deployment/react-app
+                '''
             }
         }
     }
