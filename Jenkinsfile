@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('Deploying') {
+        stage('Deploying to minikube') {
             steps {
                  sh '''
                     export KUBECONFIG=/var/jenkins_home/.kube/config
