@@ -82,6 +82,9 @@ spec:
       containers:
         - name: promtail
           image: grafana/promtail:2.9.6
+          securityContext:
+            privileged: true
+            runAsUser: 0
           args:
             - "-config.file=/etc/promtail/promtail-config.yaml"
           volumeMounts:
