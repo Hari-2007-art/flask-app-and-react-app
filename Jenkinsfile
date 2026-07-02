@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout stage') {
             steps {
                 echo 'Cloning repository from github'
                 checkout scm
