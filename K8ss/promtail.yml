@@ -41,28 +41,15 @@ data:
     clients:
       - url: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
     scrape_configs:
-      - job_name: kubernetes-pods
-        kubernetes_sd_configs:
-          - role: pod
+      - job_name: pod-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: pod-logs
+              __path__: /var/log/pods/default_*/*/*.log
         pipeline_stages:
           - docker: {}
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_node_name]
-            target_label: node_name
-          - source_labels: [__meta_kubernetes_namespace]
-            target_label: namespace
-          - source_labels: [__meta_kubernetes_pod_name]
-            target_label: pod
-          - source_labels: [__meta_kubernetes_pod_container_name]
-            target_label: container
-          - source_labels: [__meta_kubernetes_pod_label_app]
-            target_label: app
-          - replacement: /var/log/pods/*$1/*.log
-            separator: /
-            source_labels:
-              - __meta_kubernetes_pod_uid
-              - __meta_kubernetes_pod_container_name
-            target_label: __path__
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -93,11 +80,11 @@ spec:
             - name: pods-logs
               mountPath: /var/log/pods
               readOnly: true
+            - name: positions
+              mountPath: /run/promtail
             - name: containers-logs
               mountPath: /var/lib/docker/containers
               readOnly: true
-            - name: positions
-              mountPath: /run/promtail
       volumes:
         - name: config
           configMap:
@@ -105,8 +92,8 @@ spec:
         - name: pods-logs
           hostPath:
             path: /var/log/pods
+        - name: positions
+          emptyDir: {}
         - name: containers-logs
           hostPath:
             path: /var/lib/docker/containers
-        - name: positions
-          emptyDir: {}
